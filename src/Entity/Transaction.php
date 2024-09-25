@@ -42,6 +42,10 @@ class Transaction
     #[ORM\ManyToOne(cascade: ['persist'])]
     private ?Asset $receivedAsset = null;
 
+    #[ORM\ManyToOne(inversedBy: 'assets')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
+
     public function __clone()
     {
         $this->id = null;
@@ -144,6 +148,18 @@ class Transaction
     public function setReceivedAsset(?Asset $receivedAsset): static
     {
         $this->receivedAsset = $receivedAsset;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

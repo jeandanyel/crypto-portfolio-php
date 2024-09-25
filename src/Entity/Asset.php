@@ -24,6 +24,10 @@ class Asset
     #[ORM\Column]
     private ?float $quantity = 0;
 
+    #[ORM\ManyToOne(inversedBy: 'assets')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
+
     public function __toString()
     {
         return $this->cryptocurrency->getName();
@@ -70,5 +74,17 @@ class Asset
         $this->quantity -= $quantity;
 
         return $this;
-    } 
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    }
 }
