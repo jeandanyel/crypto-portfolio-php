@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello DashboardController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="wrapper">
+    {% for asset in assets %}
+        <div {{ react_component('Asset', {name: asset.cryptocurrency.name, quantity: asset.quantity}) }}>
+            Loading... <i class="fas fa-cog fa-spin fa-3x"></i>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}
