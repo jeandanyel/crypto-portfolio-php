@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Entity\Traits\TimestampableTrait;
 use App\Repository\AssetRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: AssetRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -15,13 +16,16 @@ class Asset
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['asset', 'transaction'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['asset', 'transaction'])]
     private ?Cryptocurrency $cryptocurrency = null;
 
     #[ORM\Column]
+    #[Groups(['asset', 'transaction'])]
     private ?float $quantity = 0;
 
     #[ORM\ManyToOne(inversedBy: 'assets')]

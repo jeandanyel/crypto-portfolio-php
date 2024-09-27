@@ -2,13 +2,22 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\Metadata\ApiResource;
 use App\Entity\Traits\TimestampableTrait;
+use App\Enum\TransactionType;
 use App\Repository\TransactionRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Validator\Constraints\Choice;
 
 #[ORM\Entity(repositoryClass: TransactionRepository::class)]
 #[ORM\HasLifecycleCallbacks]
+#[ApiResource(
+    normalizationContext: ['groups' => ['transaction']]
+)]
+
 class Transaction
 {
     use TimestampableTrait;
@@ -16,33 +25,56 @@ class Transaction
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('transaction')]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Choice(callback: [TransactionType::class, 'getValues'])]
+    #[Groups('transaction')]
     private ?string $type = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups('transaction')]
     private ?float $fee = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups('transaction')]
     private ?string $notes = null;
 
     #[ORM\Column]
+    #[Groups('transaction')]
     private ?\DateTimeImmutable $date = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups('transaction')]
     private ?float $transactedQuantity = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups('transaction')]
     private ?float $receivedQuantity = null;
 
     #[ORM\ManyToOne(cascade: ['persist'])]
+    #[ApiProperty(
+        openapiContext: [
+            'type' => 'string',
+            'example' => 'BTC'
+        ]
+    )]
+    #[Groups('transaction')]
     private ?Asset $transactedAsset = null;
 
     #[ORM\ManyToOne(cascade: ['persist'])]
+    #[ApiProperty(
+        openapiContext: [
+            'type' => 'string',
+            'example' => 'BTC'
+        ]
+    )]
+    #[Groups('transaction')]
     private ?Asset $receivedAsset = null;
 
-    #[ORM\ManyToOne(inversedBy: 'assets')]
+    #[ORM\ManyToOne(inversedBy: 'transactions')]
+    #[ApiProperty(readable: false, writable: false)]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 

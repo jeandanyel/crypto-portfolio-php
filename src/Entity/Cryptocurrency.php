@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Entity\Traits\TimestampableTrait;
 use App\Repository\CryptocurrencyRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: CryptocurrencyRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -15,12 +16,15 @@ class Cryptocurrency
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['cryptocurrenct', 'asset', 'transaction'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['cryptocurrenct', 'asset', 'transaction'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['cryptocurrenct', 'asset', 'transaction'])]
     private ?string $symbol = null;
 
     public function __toString()

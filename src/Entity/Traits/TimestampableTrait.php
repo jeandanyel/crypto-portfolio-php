@@ -2,13 +2,16 @@
 
 namespace App\Entity\Traits;
 
+use ApiPlatform\Metadata\ApiProperty;
 use Doctrine\ORM\Mapping as ORM;
 
 trait TimestampableTrait {
     #[ORM\Column]
+    #[ApiProperty(readable: true, writable: false)]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
+    #[ApiProperty(readable: true, writable: false)]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\PrePersist]

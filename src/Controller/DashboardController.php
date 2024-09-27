@@ -16,4 +16,12 @@ class DashboardController extends AbstractController
             'assets' => $assetRepository->findAll()
         ]);
     }
+
+    #[Route('/admin', name: 'app_admin')]
+    public function admin(AssetRepository $assetRepository): Response
+    {
+        return $this->render('dashboard/index.html.twig', [
+            'assets' => $assetRepository->findAll()
+        ]);
+    }
 }

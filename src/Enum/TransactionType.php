@@ -2,12 +2,18 @@
 
 namespace App\Enum;
 
-class TransactionType {
-    public const BUY = 'buy';
-    public const SELL = 'sell';
-    public const SEND = 'send';
-    public const RECEIVE = 'receive';
-    public const TRANSFER = 'transfer';
-    public const TRADE = 'trade';
-    public const SWAP = 'swap';
+enum TransactionType: string
+{
+    case BUY = 'buy';
+    case SELL = 'sell';
+    case SEND = 'send';
+    case RECEIVE = 'receive';
+    case TRANSFER = 'transfer';
+    case TRADE = 'trade';
+    case SWAP = 'swap';
+
+    public static function getValues(): array
+    {
+        return array_column(self::cases(), 'value');
+    }
 }
