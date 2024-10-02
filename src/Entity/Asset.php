@@ -2,13 +2,32 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
 use App\Entity\Traits\TimestampableTrait;
 use App\Repository\AssetRepository;
+use App\State\AssetProvider;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: AssetRepository::class)]
+#[ORM\UniqueConstraint(fields: ['cryptocurrency', 'user'])]
 #[ORM\HasLifecycleCallbacks]
+#[ApiResource(
+    operations: [
+        new Get(
+            provider: AssetProvider::class,
+            uriTemplate: '/assets/{cryptocurrencySymbol}',
+            uriVariables: ['cryptocurrencySymbol' => new Link(fromClass: self::class, identifiers: ['cryptocurrencySymbol'])],
+        ),
+        new GetCollection()
+    ],
+    normalizationContext: ['groups' => ['asset']]
+)]
+
 class Asset
 {
     use TimestampableTrait;
@@ -17,6 +36,7 @@ class Asset
     #[ORM\GeneratedValue]
     #[ORM\Column]
     #[Groups(['asset', 'transaction'])]
+    #[ApiProperty(identifier: false)]
     private ?int $id = null;
 
     #[ORM\ManyToOne]
@@ -52,6 +72,12 @@ class Asset
         $this->cryptocurrency = $cryptocurrency;
 
         return $this;
+    }
+    
+    #[ApiProperty(identifier: true)]
+    public function getCryptocurrencySymbol(): ?string
+    {
+        return $this->cryptocurrency->getSymbol();
     }
 
     public function getQuantity(): ?float

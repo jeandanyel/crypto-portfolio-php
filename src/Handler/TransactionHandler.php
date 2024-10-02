@@ -5,10 +5,9 @@ namespace App\Handler;
 use App\Entity\Transaction;
 use Doctrine\ORM\EntityManagerInterface;
 
-class TransactionHandler implements TransactionHandlerInterface {
-    public function __construct(private EntityManagerInterface $entityManager)
-    {
-    }
+class TransactionHandler implements TransactionHandlerInterface
+{
+    public function __construct(private EntityManagerInterface $entityManager) {}
 
     public function process(Transaction $transaction): void
     {

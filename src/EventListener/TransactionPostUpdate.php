@@ -10,7 +10,7 @@ use Doctrine\ORM\Events;
 use Doctrine\ORM\Event\PostUpdateEventArgs;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
-#[AsEntityListener(event: Events::postUpdate, method: 'postUpdate', entity: Transaction::class)]
+#[AsEntityListener(event: Events::postUpdate, entity: Transaction::class)]
 class TransactionPostUpdate
 {
     public function __construct(
@@ -18,7 +18,7 @@ class TransactionPostUpdate
         private EntityManagerInterface $entityManager,
     ) {}
 
-    public function postUpdate(Transaction $transaction, PostUpdateEventArgs $event): void
+    public function __invoke(Transaction $transaction, PostUpdateEventArgs $event): void
     {
         $originalTransaction = $this->getOriginalTransaction($transaction);
 

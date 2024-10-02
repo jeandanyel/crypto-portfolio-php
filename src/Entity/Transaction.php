@@ -7,6 +7,7 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Entity\Traits\TimestampableTrait;
 use App\Enum\TransactionType;
 use App\Repository\TransactionRepository;
+use App\Validator\Constraints as AppAssert;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -17,7 +18,7 @@ use Symfony\Component\Validator\Constraints\Choice;
 #[ApiResource(
     normalizationContext: ['groups' => ['transaction']]
 )]
-
+#[AppAssert\TransactionAssetsValidation()]
 class Transaction
 {
     use TimestampableTrait;
@@ -58,7 +59,7 @@ class Transaction
         openapiContext: [
             'type' => 'string',
             'example' => 'BTC'
-        ]
+        ],
     )]
     #[Groups('transaction')]
     private ?Asset $transactedAsset = null;
