@@ -34,21 +34,15 @@ class Transaction
     #[Groups('transaction')]
     private ?string $type = null;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\ManyToOne(cascade: ['persist'])]
+    #[ApiProperty(
+        openapiContext: [
+            'type' => 'string',
+            'example' => 'BTC'
+        ]
+    )]
     #[Groups('transaction')]
-    private ?float $fee = null;
-
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups('transaction')]
-    private ?string $notes = null;
-
-    #[ORM\Column]
-    #[Groups('transaction')]
-    private ?\DateTimeImmutable $date = null;
-
-    #[ORM\Column(nullable: true)]
-    #[Groups('transaction')]
-    private ?float $transactedQuantity = null;
+    private ?Asset $receivedAsset = null;
 
     #[ORM\Column(nullable: true)]
     #[Groups('transaction')]
@@ -64,15 +58,25 @@ class Transaction
     #[Groups('transaction')]
     private ?Asset $transactedAsset = null;
 
-    #[ORM\ManyToOne(cascade: ['persist'])]
-    #[ApiProperty(
-        openapiContext: [
-            'type' => 'string',
-            'example' => 'BTC'
-        ]
-    )]
+    #[ORM\Column(nullable: true)]
     #[Groups('transaction')]
-    private ?Asset $receivedAsset = null;
+    private ?float $transactedQuantity = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Groups('transaction')]
+    private ?float $price = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Groups('transaction')]
+    private ?float $fee = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups('transaction')]
+    private ?string $notes = null;
+
+    #[ORM\Column]
+    #[Groups('transaction')]
+    private ?\DateTimeImmutable $date = null;
 
     #[ORM\ManyToOne(inversedBy: 'transactions')]
     #[ApiProperty(readable: false, writable: false)]
@@ -193,6 +197,18 @@ class Transaction
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getPrice(): ?float
+    {
+        return $this->price;
+    }
+
+    public function setPrice(float $price): static
+    {
+        $this->price = $price;
 
         return $this;
     }
