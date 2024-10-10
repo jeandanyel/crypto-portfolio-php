@@ -27,6 +27,9 @@ class Cryptocurrency
     #[Groups(['cryptocurrenct', 'asset', 'transaction'])]
     private ?string $symbol = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $coinGeckoId = null;
+
     public function __toString()
     {
         return $this->name;
@@ -57,6 +60,18 @@ class Cryptocurrency
     public function setSymbol(string $symbol): static
     {
         $this->symbol = $symbol;
+
+        return $this;
+    }
+
+    public function getCoinGeckoId(): ?string
+    {
+        return $this->coinGeckoId;
+    }
+
+    public function setCoinGeckoId(?string $coinGeckoId): static
+    {
+        $this->coinGeckoId = $coinGeckoId;
 
         return $this;
     }

@@ -21,28 +21,20 @@ class CryptocurrencyRepository extends ServiceEntityRepository
         parent::__construct($registry, Cryptocurrency::class);
     }
 
-    //    /**
-    //     * @return Cryptocurrency[] Returns an array of Cryptocurrency objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('c.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+       /**
+        * @param array<string> $ids
+        * @return array<string, Cryptocurrency> Returns an array of Cryptocurrency objects
+        */
+       public function findByCoinGeckoIds(array $ids): array
+       {
+            $cryptocurrencies = [];
 
-    //    public function findOneBySomeField($value): ?Cryptocurrency
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+            foreach ($this->findBy(['coinGeckoId' => $ids]) as $cryptocurrency) {
+                $coinGeckoId = $cryptocurrency->getCoinGeckoId();
+
+                $cryptocurrencies[$coinGeckoId] = $cryptocurrency;
+            }
+
+            return $cryptocurrencies;
+       }
 }
