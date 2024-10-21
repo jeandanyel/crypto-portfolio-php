@@ -25,8 +25,8 @@ class TransactionType extends AbstractType
         $builder
             ->add('type', ChoiceType::class, [
                 'choices' => [
-                    EnumTransactionType::SEND => EnumTransactionType::SEND, 
-                    EnumTransactionType::RECEIVE => EnumTransactionType::RECEIVE
+                    /*EnumTransactionType::SEND => EnumTransactionType::SEND, 
+                    EnumTransactionType::RECEIVE => EnumTransactionType::RECEIVE*/
                 ]
             ])
             ->add('transacted_asset', TextType::class, ['required' => false])
