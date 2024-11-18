@@ -14,4 +14,5 @@ return [
     Lexik\Bundle\JWTAuthenticationBundle\LexikJWTAuthenticationBundle::class => ['all' => true],
     Twig\Extra\TwigExtraBundle\TwigExtraBundle::class => ['all' => true],
     Jeandanyel\CrudBundle\JeandanyelCrudBundle::class => ['all' => true],
+    Jeandanyel\ListBundle\JeandanyelListBundle::class => ['all' => true],
 ];

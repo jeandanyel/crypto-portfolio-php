@@ -14,7 +14,7 @@
         "doctrine/doctrine-bundle": "^2.12",
         "doctrine/doctrine-migrations-bundle": "^3.3",
         "doctrine/orm": "^3.1",
-        "jeandanyel/crud-bundle": "dev-main",
+        "jeandanyel/crud-bundle": "^0.1",
         "lexik/jwt-authentication-bundle": "^3.1",
         "nelmio/cors-bundle": "^2.5",
         "phpdocumentor/reflection-docblock": "^5.4",
@@ -100,11 +100,5 @@
         "symfony/stopwatch": "7.1.*",
         "symfony/var-dumper": "7.1.*",
         "symfony/web-profiler-bundle": "7.1.*"
-    },
-    "repositories": [
-        {
-            "type": "path",
-            "url": "./bundles/crud-bundle"
-        }
-    ]
+    }
 }
