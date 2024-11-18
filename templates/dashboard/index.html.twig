@@ -9,10 +9,6 @@
 </style>
 
 <div class="wrapper">
-    {% for asset in assets %}
-        <div {{ react_component('Asset', {name: asset.cryptocurrency.name, quantity: asset.quantity}) }}>
-            Loading... <i class="fas fa-cog fa-spin fa-3x"></i>
-        </div>
-    {% endfor %}
+    <h1>Title</h1>
 </div>
 {% endblock %}

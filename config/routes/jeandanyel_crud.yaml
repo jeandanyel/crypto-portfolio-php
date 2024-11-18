@@ -1,0 +1,3 @@
+jeandanyel_crud:
+  resource: "@JeandanyelCrudBundle/config/routes.yaml"
+  # prefix: /admin
