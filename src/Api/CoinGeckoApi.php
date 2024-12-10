@@ -6,14 +6,27 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class CoinGeckoApi
 {
-    public function __construct(private HttpClientInterface $coingeckoClient) {}
+    private HttpClientInterface $client;
+
+    public function __construct(private HttpClientInterface $coinGeckoClient) {
+        $this->client = $coinGeckoClient;
+    }
 
     /**
      * Returns a list of cryptocurrencies with their symbols and names.
      */
     public function getCoinsList(): array
     {
-        $response = $this->coingeckoClient->request('GET', 'coins/list');
+        $response = $this->client->request('GET', 'coins/list');
+
+        return json_decode($response->getContent());
+    }
+
+    public function getCoinsMarkets(array $parameters = []): array
+    {
+        $response = $this->client->request('GET', 'coins/markets', [
+            'query' => $parameters,
+        ]);
 
         return json_decode($response->getContent());
     }

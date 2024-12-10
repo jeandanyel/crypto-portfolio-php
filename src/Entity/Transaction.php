@@ -16,7 +16,8 @@ use Symfony\Component\Validator\Constraints\Choice;
 #[ORM\Entity(repositoryClass: TransactionRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[ApiResource(
-    normalizationContext: ['groups' => ['transaction']]
+    normalizationContext: ['groups' => ['transaction']],
+    order: ['date' => 'DESC'],
 )]
 #[AppAssert\TransactionAssetsValidation()]
 class Transaction
@@ -83,6 +84,11 @@ class Transaction
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
+    public function __toString()
+    {
+        return $this->receivedAsset;
+    }
+
     public function __clone()
     {
         $this->id = null;
@@ -146,7 +152,7 @@ class Transaction
         return $this->transactedQuantity;
     }
 
-    public function setTransactedQuantity(float $transactedQuantity): static
+    public function setTransactedQuantity(?float $transactedQuantity): static
     {
         $this->transactedQuantity = $transactedQuantity;
 
@@ -158,7 +164,7 @@ class Transaction
         return $this->receivedQuantity;
     }
 
-    public function setReceivedQuantity(float $receivedQuantity): static
+    public function setReceivedQuantity(?float $receivedQuantity): static
     {
         $this->receivedQuantity = $receivedQuantity;
 

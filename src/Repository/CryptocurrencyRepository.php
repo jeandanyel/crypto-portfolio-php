@@ -21,20 +21,61 @@ class CryptocurrencyRepository extends ServiceEntityRepository
         parent::__construct($registry, Cryptocurrency::class);
     }
 
-       /**
-        * @param array<string> $ids
-        * @return array<string, Cryptocurrency> Returns an array of Cryptocurrency objects
-        */
-       public function findByCoinGeckoIds(array $ids): array
-       {
-            $cryptocurrencies = [];
+    /**
+     * @param array<string> $ids
+     * @return array<string, Cryptocurrency> Returns an array of Cryptocurrency objects
+     */
+    public function findByCoinGeckoIds(array $ids): array
+    {
+        $cryptocurrencies = [];
 
-            foreach ($this->findBy(['coinGeckoId' => $ids]) as $cryptocurrency) {
-                $coinGeckoId = $cryptocurrency->getCoinGeckoId();
+        foreach ($this->findBy(['coinGeckoId' => $ids]) as $cryptocurrency) {
+            $coinGeckoId = $cryptocurrency->getCoinGeckoId();
 
-                $cryptocurrencies[$coinGeckoId] = $cryptocurrency;
-            }
+            $cryptocurrencies[$coinGeckoId] = $cryptocurrency;
+        }
 
-            return $cryptocurrencies;
-       }
+        return $cryptocurrencies;
+    }
+
+    /**
+     * @param array<int> $ids
+     * @return array<int, Cryptocurrency> Returns an array of Cryptocurrency objects
+     */
+    public function findByCoinMarketCapIds(array $ids): array
+    {
+        $cryptocurrencies = [];
+
+        foreach ($this->findBy(['coinMarketCapId' => $ids]) as $cryptocurrency) {
+            $coinMarketCapId = $cryptocurrency->getCoinMarketCapId();
+
+            $cryptocurrencies[$coinMarketCapId] = $cryptocurrency;
+        }
+
+        return $cryptocurrencies;
+    }
+
+    /**
+     * @param array<int> $ids
+     * @return array<int, Cryptocurrency> Returns an array of Cryptocurrency objects
+     */
+    public function findAllOfCoinMarketCap(): array
+    {
+        return $this->createQueryBuilder('c')
+            ->where('c.coinMarketCapId IS NOT NULL')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @param array<int> $ids
+     * @return array<int, Cryptocurrency> Returns an array of Cryptocurrency objects
+     */
+    public function findAllOfCoinGecko(): array
+    {
+        return $this->createQueryBuilder('c')
+            ->where('c.coinGeckoId IS NOT NULL')
+            ->getQuery()
+            ->getResult();
+    }
 }

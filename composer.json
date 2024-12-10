@@ -10,37 +10,38 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "api-platform/core": "^4.0",
+        "aws/aws-sdk-php": "^3.334",
         "doctrine/dbal": "^3",
         "doctrine/doctrine-bundle": "^2.12",
         "doctrine/doctrine-migrations-bundle": "^3.3",
         "doctrine/orm": "^3.1",
-        "jeandanyel/crud-bundle": "^0.1",
+        "jeandanyel/crud-bundle": "dev-main",
         "lexik/jwt-authentication-bundle": "^3.1",
         "nelmio/cors-bundle": "^2.5",
         "phpdocumentor/reflection-docblock": "^5.4",
         "phpstan/phpdoc-parser": "^1.31",
         "runtime/frankenphp-symfony": "^0.2.0",
-        "symfony/asset": "7.1.*",
-        "symfony/asset-mapper": "7.1.*",
-        "symfony/console": "7.1.*",
-        "symfony/doctrine-messenger": "7.1.*",
-        "symfony/dotenv": "7.1.*",
-        "symfony/expression-language": "7.1.*",
+        "symfony/asset": "7.2.*",
+        "symfony/asset-mapper": "7.2.*",
+        "symfony/console": "7.2.*",
+        "symfony/doctrine-messenger": "7.2.*",
+        "symfony/dotenv": "7.2.*",
+        "symfony/expression-language": "7.2.*",
         "symfony/flex": "^2",
-        "symfony/form": "7.1.*",
-        "symfony/framework-bundle": "7.1.*",
-        "symfony/http-client": "7.1.*",
-        "symfony/messenger": "7.1.*",
-        "symfony/property-access": "7.1.*",
-        "symfony/property-info": "7.1.*",
-        "symfony/runtime": "7.1.*",
-        "symfony/scheduler": "7.1.*",
-        "symfony/security-bundle": "7.1.*",
-        "symfony/serializer": "7.1.*",
+        "symfony/form": "7.2.*",
+        "symfony/framework-bundle": "7.2.*",
+        "symfony/http-client": "7.2.*",
+        "symfony/messenger": "7.2.*",
+        "symfony/property-access": "7.2.*",
+        "symfony/property-info": "7.2.*",
+        "symfony/runtime": "7.2.*",
+        "symfony/scheduler": "7.2.*",
+        "symfony/security-bundle": "7.2.*",
+        "symfony/serializer": "7.2.*",
         "symfony/stimulus-bundle": "^2.16",
-        "symfony/twig-bundle": "7.1.*",
-        "symfony/validator": "7.1.*",
-        "symfony/yaml": "7.1.*",
+        "symfony/twig-bundle": "7.2.*",
+        "symfony/validator": "7.2.*",
+        "symfony/yaml": "7.2.*",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/twig": "^2.12|^3.0"
     },
@@ -91,14 +92,20 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "7.1.*",
+            "require": "7.2.*",
             "docker": true
         }
     },
     "require-dev": {
         "symfony/maker-bundle": "^1.57",
-        "symfony/stopwatch": "7.1.*",
-        "symfony/var-dumper": "7.1.*",
-        "symfony/web-profiler-bundle": "7.1.*"
-    }
+        "symfony/stopwatch": "7.2.*",
+        "symfony/var-dumper": "7.2.*",
+        "symfony/web-profiler-bundle": "7.2.*"
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "./bundles/crud-bundle"
+        }
+    ]
 }

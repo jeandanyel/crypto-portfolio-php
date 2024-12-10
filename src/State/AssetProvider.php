@@ -30,7 +30,7 @@ final class AssetProvider implements ProviderInterface
     {
         $rootOperation = $context['root_operation'] ?? null;
         $isTransactionOperation = $rootOperation?->getClass() === Transaction::class;
-        $cryptocurrency = $this->cryptocurrencyRepository->findOneBy(['symbol' => $uriVariables['cryptocurrencySymbol']]);
+        $cryptocurrency = $this->cryptocurrencyRepository->find($uriVariables['cryptocurrencyId']);
         $user = $this->security->getUser();
 
         $asset = $this->assetRepository->findOneBy([

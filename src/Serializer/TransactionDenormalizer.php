@@ -31,7 +31,7 @@ class TransactionDenormalizer implements DenormalizerInterface, DenormalizerAwar
             }
 
             $data[$assetProperty] = $this->iriConverter->getIriFromResource(resource: Asset::class, context: [
-                'uri_variables' => ['cryptocurrencySymbol' => $data[$assetProperty]]
+                'uri_variables' => ['cryptocurrencyId' => $data[$assetProperty]]
             ]);
         }
 

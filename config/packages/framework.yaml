@@ -11,8 +11,17 @@ framework:
 
     http_client:
         scoped_clients:
-            coingecko.client:
+            coinGecko.client:
                 base_uri: https://api.coingecko.com/api/v3/
+                headers:
+                    x-cg-demo-api-key: '%env(COINGECKO_API_KEY)%'
+                    Accept: 'application/json'
+
+            coinMarketCap.client:
+                base_uri: https://pro-api.coinmarketcap.com/v1/
+                headers:
+                    X-CMC_PRO_API_KEY: '%env(COINMARKETCAP_API_KEY)%'
+                    Accept: 'application/json'
 
 when@test:
     framework:

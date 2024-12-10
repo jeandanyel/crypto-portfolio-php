@@ -20,14 +20,13 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new Get(
             provider: AssetProvider::class,
-            uriTemplate: '/assets/{cryptocurrencySymbol}',
-            uriVariables: ['cryptocurrencySymbol' => new Link(fromClass: self::class, identifiers: ['cryptocurrencySymbol'])],
+            uriTemplate: '/assets/{cryptocurrencyId}',
+            uriVariables: ['cryptocurrencyId' => new Link(fromClass: self::class, identifiers: ['cryptocurrencyId'])],
         ),
         new GetCollection()
     ],
     normalizationContext: ['groups' => ['asset']]
 )]
-
 class Asset
 {
     use TimestampableTrait;
@@ -75,9 +74,9 @@ class Asset
     }
     
     #[ApiProperty(identifier: true)]
-    public function getCryptocurrencySymbol(): ?string
+    public function getCryptocurrencyId(): ?string
     {
-        return $this->cryptocurrency->getSymbol();
+        return $this->cryptocurrency->getId();
     }
 
     public function getQuantity(): ?float
