@@ -15,9 +15,11 @@ class CoinGeckoApi
     /**
      * Returns a list of cryptocurrencies with their symbols and names.
      */
-    public function getCoinsList(): array
+    public function getCoinsList(array $parameters = []): array
     {
-        $response = $this->client->request('GET', 'coins/list');
+        $response = $this->client->request('GET', 'coins/list', [
+            'query' => $parameters,
+        ]);
 
         return json_decode($response->getContent());
     }

@@ -63,6 +63,7 @@ class CryptocurrencyRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('c')
             ->where('c.coinMarketCapId IS NOT NULL')
+            ->orderBy('c.rank', 'ASC')
             ->getQuery()
             ->getResult();
     }

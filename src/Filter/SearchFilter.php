@@ -29,8 +29,10 @@ final class SearchFilter extends AbstractFilter
             $conditions[] = sprintf('LOWER(o.%s) LIKE :%s', $property, $parameterName);
         }
 
-        $queryBuilder->andWhere(sprintf('(%s)', implode(' OR ', $conditions)))
-                ->setParameter($parameterName, "%$value%");
+        $queryBuilder
+            ->andWhere(sprintf('(%s)', implode(' OR ', $conditions)))
+            ->andWhere('o.coinMarketCapId IS NOT NULL AND o.coinGeckoId IS NOT NULL')
+            ->setParameter($parameterName, "%$value%");
     }
 
     public function getDescription(string $resourceClass): array
