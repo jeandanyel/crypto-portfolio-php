@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Cryptocurrency;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -78,5 +79,23 @@ class CryptocurrencyRepository extends ServiceEntityRepository
             ->where('c.coinGeckoId IS NOT NULL')
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * @param array<int> $ids
+     * @return array<int, Cryptocurrency> Returns an array of Cryptocurrency objects
+     */
+    public function findPaginated(int $page = 1, int $limit = 10): Paginator
+    {
+        $queryBuilder = $this->createQueryBuilder('c')
+            ->where('c.coinGeckoId IS NOT NULL')
+            ->orderBy('c.rank', 'ASC');
+
+        $query = $queryBuilder
+            ->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit)
+            ->getQuery();
+
+        return new Paginator($query, true);
     }
 }

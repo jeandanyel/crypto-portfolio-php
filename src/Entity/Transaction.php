@@ -47,6 +47,10 @@ class Transaction
 
     #[ORM\Column(nullable: true)]
     #[Groups('transaction')]
+    private ?float $receivedAssetPrice = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Groups('transaction')]
     private ?float $receivedQuantity = null;
 
     #[ORM\ManyToOne(cascade: ['persist'])]
@@ -61,11 +65,11 @@ class Transaction
 
     #[ORM\Column(nullable: true)]
     #[Groups('transaction')]
-    private ?float $transactedQuantity = null;
+    private ?float $transactedAssetPrice = null;
 
     #[ORM\Column(nullable: true)]
     #[Groups('transaction')]
-    private ?float $price = null;
+    private ?float $transactedQuantity = null;
 
     #[ORM\Column(nullable: true)]
     #[Groups('transaction')]
@@ -207,14 +211,26 @@ class Transaction
         return $this;
     }
 
-    public function getPrice(): ?float
+    public function getReceivedAssetPrice(): ?float
     {
-        return $this->price;
+        return $this->receivedAssetPrice;
     }
 
-    public function setPrice(float $price): static
+    public function setReceivedAssetPrice(?float $receivedAssetPrice): static
     {
-        $this->price = $price;
+        $this->receivedAssetPrice = $receivedAssetPrice;
+
+        return $this;
+    }
+
+    public function getTransactedAssetPrice(): ?float
+    {
+        return $this->transactedAssetPrice;
+    }
+
+    public function setTransactedAssetPrice(?float $transactedAssetPrice): static
+    {
+        $this->transactedAssetPrice = $transactedAssetPrice;
 
         return $this;
     }

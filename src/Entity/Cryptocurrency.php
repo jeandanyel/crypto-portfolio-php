@@ -51,6 +51,10 @@ class Cryptocurrency
     #[ORM\Column(nullable: true)]
     private ?int $rank = null;
 
+    #[ORM\Column(nullable: true)]
+    #[Groups(['cryptocurrency', 'asset', 'transaction'])]
+    private ?float $currentPrice = null;
+
     public function __toString()
     {
         return $this->name;
@@ -117,6 +121,18 @@ class Cryptocurrency
     public function setRank(?int $rank): static
     {
         $this->rank = $rank;
+
+        return $this;
+    }
+
+    public function getCurrentPrice(): ?float
+    {
+        return $this->currentPrice;
+    }
+
+    public function setCurrentPrice(?float $currentPrice): static
+    {
+        $this->currentPrice = $currentPrice;
 
         return $this;
     }
