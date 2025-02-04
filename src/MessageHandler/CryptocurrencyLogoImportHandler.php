@@ -20,7 +20,7 @@ class CryptocurrencyLogoImportHandler
     {
         try {
             $coinMarketCapId = $message->getCoinMarketCapId();
-            $logoUrl = sprintf('https://s2.coinmarketcap.com/static/img/coins/64x64/%s.png', $coinMarketCapId);
+            $logoUrl = sprintf('https://s2.coinmarketcap.com/static/img/coins/128x128/%s.png', $coinMarketCapId);
             $logoPath = sprintf('coinmarketcap/cryptocurrency/%s.png', $coinMarketCapId);
 
             $this->s3Client->putObject([
