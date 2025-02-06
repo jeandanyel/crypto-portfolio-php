@@ -7,6 +7,7 @@ use App\Entity\Asset;
 use App\Entity\Transaction;
 use App\Repository\AssetRepository;
 use App\Repository\CryptocurrencyRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -17,7 +18,7 @@ class TransactionDenormalizer implements DenormalizerInterface, DenormalizerAwar
     use DenormalizerAwareTrait;
 
     public function __construct(
-        private CryptocurrencyRepository $cryptocurrencyRepository,
+        private EntityManagerInterface $entityManager,
         private AssetRepository $assetRepository,
         private Security $security,
         private IriConverterInterface $iriConverter
@@ -25,14 +26,32 @@ class TransactionDenormalizer implements DenormalizerInterface, DenormalizerAwar
 
     public function denormalize($data, $class, $format = null, array $context = []): Transaction
     {
+        $user = $this->security->getUser();
+
         foreach (['receivedAsset', 'transactedAsset'] as $assetProperty) {
             if (empty($data[$assetProperty])) {
                 continue;
             }
 
-            $data[$assetProperty] = $this->iriConverter->getIriFromResource(resource: Asset::class, context: [
-                'uri_variables' => ['cryptocurrencyId' => $data[$assetProperty]]
-            ]);
+            if (true /* TODO: validate if IRI is cryptocurrency */) {
+                $cryptocurrency = $this->iriConverter->getResourceFromIri($data[$assetProperty]);
+                $asset = $this->assetRepository->findOneBy([
+                    'user' => $user,
+                    'cryptocurrency' => $cryptocurrency
+                ]);
+
+                if (!$asset) {
+                    $asset = new Asset();
+
+                    $asset->setCryptocurrency($cryptocurrency);
+                    $asset->setUser($user);
+
+                    $this->entityManager->persist($asset);
+                    $this->entityManager->flush();
+                }
+
+                $data[$assetProperty] = $this->iriConverter->getIriFromResource($asset);
+            }
         }
 
         return $this->denormalizer->denormalize($data, $class, $format, $context + [__CLASS__ => true]);

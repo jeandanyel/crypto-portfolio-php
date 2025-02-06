@@ -6,23 +6,20 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Link;
 use App\Entity\Traits\TimestampableTrait;
 use App\Repository\AssetRepository;
-use App\State\AssetProvider;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: AssetRepository::class)]
 #[ORM\UniqueConstraint(fields: ['cryptocurrency', 'user'])]
 #[ORM\HasLifecycleCallbacks]
 #[ApiResource(
     operations: [
-        new Get(
-            provider: AssetProvider::class,
-            uriTemplate: '/assets/{cryptocurrencyId}',
-            uriVariables: ['cryptocurrencyId' => new Link(fromClass: self::class, identifiers: ['cryptocurrencyId'])],
-        ),
+        new Get(),
         new GetCollection()
     ],
     normalizationContext: ['groups' => ['asset']]
@@ -35,7 +32,7 @@ class Asset
     #[ORM\GeneratedValue]
     #[ORM\Column]
     #[Groups(['asset', 'transaction'])]
-    #[ApiProperty(identifier: false)]
+    #[ApiProperty(identifier: true)]
     private ?int $id = null;
 
     #[ORM\ManyToOne]
@@ -44,12 +41,24 @@ class Asset
     private ?Cryptocurrency $cryptocurrency = null;
 
     #[ORM\Column]
-    #[Groups(['asset', 'transaction'])]
+    #[Assert\PositiveOrZero()]
+    #[Groups(['asset', 'transaction',])]
     private ?float $quantity = 0;
 
     #[ORM\ManyToOne(inversedBy: 'assets')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
+
+    /**
+     * @var Collection<int, SellStrategy>
+     */
+    #[ORM\OneToMany(targetEntity: SellStrategy::class, mappedBy: 'asset', orphanRemoval: true)]
+    private Collection $sellStrategies;
+
+    public function __construct()
+    {
+        $this->sellStrategies = new ArrayCollection();
+    }
 
     public function __toString()
     {
@@ -73,7 +82,7 @@ class Asset
         return $this;
     }
     
-    #[ApiProperty(identifier: true)]
+    // #[ApiProperty(identifier: true)]
     public function getCryptocurrencyId(): ?string
     {
         return $this->cryptocurrency->getId();
@@ -113,6 +122,36 @@ class Asset
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SellStrategy>
+     */
+    public function getSellStrategies(): Collection
+    {
+        return $this->sellStrategies;
+    }
+
+    public function addSellStrategy(SellStrategy $sellStrategy): static
+    {
+        if (!$this->sellStrategies->contains($sellStrategy)) {
+            $this->sellStrategies->add($sellStrategy);
+            $sellStrategy->setAsset($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSellStrategy(SellStrategy $sellStrategy): static
+    {
+        if ($this->sellStrategies->removeElement($sellStrategy)) {
+            // set the owning side to null (unless already changed)
+            if ($sellStrategy->getAsset() === $this) {
+                $sellStrategy->setAsset(null);
+            }
+        }
 
         return $this;
     }

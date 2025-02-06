@@ -11,7 +11,7 @@ use App\Validator\Constraints as AppAssert;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
-use Symfony\Component\Validator\Constraints\Choice;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TransactionRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -31,47 +31,52 @@ class Transaction
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Choice(callback: [TransactionType::class, 'getValues'])]
+    #[Assert\Choice(callback: [TransactionType::class, 'getValues'])]
     #[Groups('transaction')]
     private ?string $type = null;
 
     #[ORM\ManyToOne(cascade: ['persist'])]
     #[ApiProperty(
         openapiContext: [
-            'type' => 'string',
-            'example' => 'BTC'
+            'type' => 'IRI',
+            'example' => '/api/cryptocurrencies/{id}'
         ]
     )]
     #[Groups('transaction')]
     private ?Asset $receivedAsset = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Positive()]
     #[Groups('transaction')]
     private ?float $receivedAssetPrice = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Positive()]
     #[Groups('transaction')]
     private ?float $receivedQuantity = null;
 
     #[ORM\ManyToOne(cascade: ['persist'])]
     #[ApiProperty(
         openapiContext: [
-            'type' => 'string',
-            'example' => 'BTC'
+            'type' => 'IRI',
+            'example' => '/api/cryptocurrencies/{id}'
         ],
     )]
     #[Groups('transaction')]
     private ?Asset $transactedAsset = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Positive()]
     #[Groups('transaction')]
     private ?float $transactedAssetPrice = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Positive()]
     #[Groups('transaction')]
     private ?float $transactedQuantity = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\PositiveOrZero()]
     #[Groups('transaction')]
     private ?float $fee = null;
 
