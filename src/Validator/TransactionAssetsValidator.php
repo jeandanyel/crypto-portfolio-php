@@ -22,21 +22,44 @@ class TransactionAssetsValidator extends ConstraintValidator
             throw new UnexpectedTypeException($transaction, Transaction::class);
         }
 
-        if (!$transaction->getReceivedAsset() && !$transaction->getTransactedAsset()) {
+        $transactedAsset = $transaction->getTransactedAsset();
+        $transactedQuantity = $transaction->getTransactedQuantity();
+        $receivedAsset = $transaction->getReceivedAsset();
+        $receivedQuantity = $transaction->getReceivedQuantity();
+        
+        if (!$receivedAsset && !$transactedAsset) {
             $this->context->buildViolation("At least one of 'received_asset' or 'transacted_asset' must be provided.")
                 ->addViolation();
+
+            return;
         }
 
-        if ($transaction->getReceivedAsset() && !$transaction->getReceivedQuantity()) {
+        if ($receivedAsset && !$receivedQuantity) {
             $this->context->buildViolation('The quantity for the received asset is missing.')
                 ->atPath('receivedQuantity')
                 ->addViolation();
         }
 
-        if ($transaction->getTransactedAsset() && !$transaction->getTransactedQuantity()) {
-            $this->context->buildViolation('The quantity for the transacted asset is missing.')
-                ->atPath('transactedQuantity')
-                ->addViolation();
+        if ($transactedAsset) {
+            if (!$transactedQuantity) {
+                $this->context->buildViolation('The quantity for the transacted asset is missing.')
+                    ->atPath('transactedQuantity')
+                    ->addViolation();
+            }
+
+            if ($transactedQuantity > $transactedAsset->getQuantity()) {
+                $symbol = $transactedAsset->getCryptocurrency()->getSymbol();
+                $message = sprintf(
+                    'Insufficient balance. You requested %s %s, but only %s is available.',
+                    $transactedQuantity,
+                    strtoupper($symbol),
+                    $transactedAsset->getQuantity(),
+                );
+
+                $this->context->buildViolation($message)
+                    ->atPath('transactedQuantity')
+                    ->addViolation();
+            }
         }
     }
 }

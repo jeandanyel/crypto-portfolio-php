@@ -2,6 +2,7 @@
 
 namespace App\Validator;
 
+use App\Entity\Asset;
 use App\Entity\SellStrategy;
 use App\Validator\Constraints\SellStrategyPercentageValidation;
 use Symfony\Component\Validator\Constraint;
@@ -19,18 +20,17 @@ class SellStrategyPercentageValidator extends ConstraintValidator
      * 
      * @param SellStrategy $sellStrategy
      */
-    public function validate(mixed $sellStrategy, Constraint $constraint): void
+    public function validate(mixed $asset, Constraint $constraint): void
     {
-        if (!$sellStrategy instanceof SellStrategy) {
-            throw new UnexpectedTypeException($sellStrategy, SellStrategy::class);
+        if (!$asset instanceof Asset) {
+            throw new UnexpectedTypeException($asset, Asset::class);
         }
 
         if (!$constraint instanceof SellStrategyPercentageValidation) {
             throw new UnexpectedTypeException($constraint, SellStrategyPercentageValidation::class);
         }
 
-        $totalPercentage = $sellStrategy->getPercentage();
-        $asset = $sellStrategy->getAsset();
+        $totalPercentage = 0;
 
         foreach ($asset->getSellStrategies() as $assetSellStrategy) {
             $totalPercentage += $assetSellStrategy->getPercentage();
@@ -38,7 +38,7 @@ class SellStrategyPercentageValidator extends ConstraintValidator
 
         if ($totalPercentage > 100) {
             $this->context->buildViolation($constraint->message)
-                ->atPath('percentage')
+                ->atPath('sellStrategies')
                 ->addViolation();
         }
     }

@@ -6,8 +6,10 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use App\Entity\Traits\TimestampableTrait;
 use App\Repository\AssetRepository;
+use App\Validator\Constraints as AppAssert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -20,10 +22,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     operations: [
         new Get(),
-        new GetCollection()
+        new GetCollection(),
+        new Patch()
     ],
-    normalizationContext: ['groups' => ['asset']]
+    normalizationContext: ['groups' => ['asset']],
+    denormalizationContext: ['groups' => ['asset']]
 )]
+#[AppAssert\SellStrategyPercentageValidation()]
 class Asset
 {
     use TimestampableTrait;
@@ -38,21 +43,26 @@ class Asset
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['asset', 'transaction'])]
+    #[ApiProperty(writable: false)]
     private ?Cryptocurrency $cryptocurrency = null;
 
     #[ORM\Column]
     #[Assert\PositiveOrZero()]
-    #[Groups(['asset', 'transaction',])]
+    #[Groups(['asset', 'transaction'])]
+    #[ApiProperty(writable: false)]
     private ?float $quantity = 0;
 
     #[ORM\ManyToOne(inversedBy: 'assets')]
     #[ORM\JoinColumn(nullable: false)]
+    #[ApiProperty(readable: false, writable: false)]
     private ?User $user = null;
 
     /**
      * @var Collection<int, SellStrategy>
      */
-    #[ORM\OneToMany(targetEntity: SellStrategy::class, mappedBy: 'asset', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: SellStrategy::class, mappedBy: 'asset', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[Assert\Valid]
+    #[Groups(['asset'])]
     private Collection $sellStrategies;
 
     public function __construct()
