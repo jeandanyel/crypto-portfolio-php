@@ -65,6 +65,16 @@ class Asset
     #[Groups(['asset'])]
     private Collection $sellStrategies;
 
+    #[ORM\Column]
+    #[Groups(['asset'])]
+    #[ApiProperty(writable: false)]
+    private ?float $averageBuyPrice = 0;
+
+    #[ORM\Column]
+    #[Groups(['asset'])]
+    #[ApiProperty(writable: false)]
+    private ?float $totalInvested = 0;
+
     public function __construct()
     {
         $this->sellStrategies = new ArrayCollection();
@@ -176,5 +186,29 @@ class Asset
         }
 
         return $total;
+    }
+
+    public function getAverageBuyPrice(): ?float
+    {
+        return $this->averageBuyPrice;
+    }
+
+    public function setAverageBuyPrice(float $averageBuyPrice): static
+    {
+        $this->averageBuyPrice = $averageBuyPrice;
+
+        return $this;
+    }
+
+    public function getTotalInvested(): ?float
+    {
+        return $this->totalInvested;
+    }
+
+    public function setTotalInvested(float $totalInvested): static
+    {
+        $this->totalInvested = $totalInvested;
+
+        return $this;
     }
 }
