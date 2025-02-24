@@ -77,6 +77,11 @@ RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 COPY --link frankenphp/conf.d/app.prod.ini $PHP_INI_DIR/conf.d/
 COPY --link frankenphp/worker.Caddyfile /etc/caddy/worker.Caddyfile
 
+# Provide git with the GitHub access token required to access private repositories
+ARG GITHUB_ACCESS_TOKEN=""
+ENV GITHUB_ACCESS_TOKEN ${GITHUB_ACCESS_TOKEN}
+RUN composer config --global github-oauth.github.com ${GITHUB_ACCESS_TOKEN}
+
 # prevent the reinstallation of vendors at every changes in the source code
 COPY --link composer.* symfony.* ./
 RUN set -eux; \
