@@ -53,8 +53,11 @@ if [ "$1" = 'frankenphp' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 		fi
 	fi
 
-	setfacl -R -m u:www-data:rwX -m u:"$(whoami)":rwX var
-	setfacl -dR -m u:www-data:rwX -m u:"$(whoami)":rwX var
+	# Set the correct ownership
+	chown -R www-data:$(whoami) var
+
+	# Set the appropriate permissions
+	chmod -R 775 var
 fi
 
 exec docker-php-entrypoint "$@"
