@@ -165,4 +165,16 @@ class Asset
 
         return $this;
     }
+
+    #[Groups(['asset'])]
+    public function getSellStrategiesTotal(): float
+    {
+        $total = 0;
+
+        foreach ($this->sellStrategies as $sellStrategy) {
+            $total += $sellStrategy->getTotal();
+        }
+
+        return $total;
+    }
 }

@@ -71,4 +71,13 @@ class SellStrategy
 
         return $this;
     }
+
+    #[Groups(['sell_strategy', 'asset'])]
+    public function getTotal(): float
+    {
+        $percentage = $this->percentage / 100;
+        $quantity = $this->asset->getQuantity();
+
+        return ($percentage * $quantity) * $this->price;
+    }
 }
