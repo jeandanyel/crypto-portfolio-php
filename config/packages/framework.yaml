@@ -33,4 +33,3 @@ when@prod:
     framework:
         trusted_proxies: '127.0.0.1,REMOTE_ADDR'
         trusted_headers: ['x-forwarded-proto', 'x-forwarded-for']
-        http_method_override: true

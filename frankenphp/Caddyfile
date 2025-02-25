@@ -53,6 +53,10 @@
 	@frontController path index.php
 	php @frontController
 
+	php_fastcgi unix//var/run/php/php-fpm.sock {
+		trusted_proxies private_ranges
+	}
+
 	file_server {
 		hide *.php
 	}
