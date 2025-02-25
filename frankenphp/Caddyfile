@@ -53,12 +53,6 @@
 	@frontController path index.php
 	php @frontController
 
-	php_fastcgi unix//var/run/php/php-fpm.sock {
-		# Allow x-forwarded-* headers to pass through
-		# https://caddyserver.com/docs/caddyfile/directives/reverse_proxy#defaults
-		trusted_proxies private_ranges
-	}
-
 	file_server {
 		hide *.php
 	}
