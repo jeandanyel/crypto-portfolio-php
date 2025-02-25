@@ -24,7 +24,7 @@
 
 	mercure {
 		# Transport to use (default to Bolt)
-		transport_url {$MERCURE_TRANSPORT_URL:local://local}
+		transport_url {$MERCURE_TRANSPORT_URL:bolt:///data/mercure.db}
 		# Publisher JWT key
 		publisher_jwt {env.MERCURE_PUBLISHER_JWT_KEY} {env.MERCURE_PUBLISHER_JWT_ALG}
 		# Subscriber JWT key
@@ -48,16 +48,17 @@
 		not path /.well-known/mercure*
 		not file {path}
 	}
+
 	rewrite @phpRoute index.php
 
 	@frontController path index.php
 	php @frontController
 
-	file_server {
-		hide *.php
-	}
-
 	reverse_proxy php:80 {
 		trusted_proxies private_ranges
+	}
+
+	file_server {
+		hide *.php
 	}
 }
