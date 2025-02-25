@@ -6,7 +6,7 @@
 	}
 }
 
-{$CADDY_EXTRA_CONFIG}
+{$CADDY_EXTRA_CONFIG} 
 
 {$SERVER_NAME:localhost} {
 	log {
@@ -55,5 +55,9 @@
 
 	file_server {
 		hide *.php
+	}
+
+	reverse_proxy php:80 {
+		trusted_proxies private_ranges
 	}
 }
