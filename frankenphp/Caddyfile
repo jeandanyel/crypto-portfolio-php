@@ -9,6 +9,8 @@
 {$CADDY_EXTRA_CONFIG}
 
 {$SERVER_NAME:localhost} {
+	trusted_proxies private_ranges
+
 	log {
 		{$CADDY_SERVER_LOG_OPTIONS}
 		# Redact the authorization query parameter that can be set by Mercure
@@ -52,10 +54,6 @@
 
 	@frontController path index.php
 	php @frontController
-
-	php_fastcgi unix//var/run/php/php-fpm.sock {
-		trusted_proxies private_ranges
-	}
 
 	file_server {
 		hide *.php
