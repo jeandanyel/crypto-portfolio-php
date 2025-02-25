@@ -1,10 +1,6 @@
 {
 	{$CADDY_GLOBAL_OPTIONS}
 
-	servers {
-		trusted_proxies private_ranges
-	}
-
 	frankenphp {
 		{$FRANKENPHP_CONFIG}
 	}
@@ -13,6 +9,8 @@
 {$CADDY_EXTRA_CONFIG}
 
 {$SERVER_NAME:localhost} {
+	auto_https disable_redirects
+
 	log {
 		{$CADDY_SERVER_LOG_OPTIONS}
 		# Redact the authorization query parameter that can be set by Mercure
