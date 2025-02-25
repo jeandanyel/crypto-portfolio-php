@@ -28,3 +28,9 @@ when@test:
         test: true
         session:
             storage_factory_id: session.storage.factory.mock_file
+
+when@prod:
+    framework:
+        trusted_proxies: 'private_ranges'
+        trusted_headers: ['x-forwarded-proto', 'x-forwarded-for']
+        http_method_override: true
