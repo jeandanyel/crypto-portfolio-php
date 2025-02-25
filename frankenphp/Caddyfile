@@ -8,19 +8,13 @@
 
 {$CADDY_EXTRA_CONFIG}
 
-portfolio.eckidev.com {
+{$SERVER_NAME:localhost} {
 	reverse_proxy php:80 {
-		header_up Host {upstream_hostport}
-		header_up X-Forwarded-Host {host}
-		header_up X-Forwarded-Proto {scheme}
 		header_up X-Forwarded-Port {server_port}
 		header_up X-Real-IP {remote}
-		header_up X-Forwarded-For {remote}
 		header_up X-Forwarded-Attempted {remote}
 	}
-}
 
-{$SERVER_NAME:localhost} {
 	log {
 		{$CADDY_SERVER_LOG_OPTIONS}
 		# Redact the authorization query parameter that can be set by Mercure
