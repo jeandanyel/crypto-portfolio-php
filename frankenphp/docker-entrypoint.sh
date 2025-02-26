@@ -57,6 +57,8 @@ if [ "$1" = 'frankenphp' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 		fi
 	fi
 
+	php bin/console asset-map:compile --no-interaction
+
 	# Set the correct ownership
 	chown -R www-data:$(whoami) var
 
