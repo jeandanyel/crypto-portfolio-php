@@ -16,4 +16,5 @@ return [
     Jeandanyel\CrudBundle\JeandanyelCrudBundle::class => ['all' => true],
     Jeandanyel\ListBundle\JeandanyelListBundle::class => ['all' => true],
     Gesdinet\JWTRefreshTokenBundle\GesdinetJWTRefreshTokenBundle::class => ['all' => true],
+    Sentry\SentryBundle\SentryBundle::class => ['prod' => true],
 ];
