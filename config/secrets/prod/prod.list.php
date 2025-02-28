@@ -7,5 +7,7 @@ return [
     'COINGECKO_API_KEY' => null,
     'COINMARKETCAP_API_KEY' => null,
     'JWT_PASSPHRASE' => null,
+    'JWT_PUBLIC_KEY' => null,
+    'JWT_SECRET_KEY' => null,
     'SENTRY_DSN' => null,
 ];
