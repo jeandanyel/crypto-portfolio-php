@@ -6,7 +6,6 @@ use ApiPlatform\Metadata\IriConverterInterface;
 use App\Entity\Asset;
 use App\Entity\Transaction;
 use App\Repository\AssetRepository;
-use App\Repository\CryptocurrencyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -24,7 +23,7 @@ class TransactionDenormalizer implements DenormalizerInterface, DenormalizerAwar
         private IriConverterInterface $iriConverter
     ) {}
 
-    public function denormalize($data, $class, $format = null, array $context = []): Transaction
+    public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): Transaction
     {
         $user = $this->security->getUser();
 
@@ -54,10 +53,10 @@ class TransactionDenormalizer implements DenormalizerInterface, DenormalizerAwar
             }
         }
 
-        return $this->denormalizer->denormalize($data, $class, $format, $context + [__CLASS__ => true]);
+        return $this->denormalizer->denormalize($data, $type, $format, $context + [__CLASS__ => true]);
     }
 
-    public function supportsDenormalization($data, $type, $format = null, array $context = []): bool
+    public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
         $formatIsJson = in_array($format, ['json', 'jsonld'], true);
         $dataHasAssets = !empty($data['receivedAsset']) || !empty($data['transactedAsset']);
