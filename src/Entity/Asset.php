@@ -9,6 +9,7 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use App\Entity\Traits\TimestampableTrait;
 use App\Repository\AssetRepository;
+use App\State\AssetStateProvider;
 use App\Validator\Constraints as AppAssert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -26,7 +27,8 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Patch()
     ],
     normalizationContext: ['groups' => ['asset']],
-    denormalizationContext: ['groups' => ['asset']]
+    denormalizationContext: ['groups' => ['asset']],
+    provider: AssetStateProvider::class
 )]
 #[AppAssert\SellStrategyPercentageValidation()]
 class Asset

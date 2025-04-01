@@ -20,4 +20,15 @@ class AssetRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Asset::class);
     }
+
+    /**
+     * @return Asset[]
+     */
+    public function findAllWithPositiveQuantity(): array
+    {
+        return $this->createQueryBuilder('a')
+            ->where('a.quantity > 0')
+            ->getQuery()
+            ->getResult();
+    }
 }
