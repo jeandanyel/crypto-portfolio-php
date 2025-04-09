@@ -67,6 +67,6 @@ class TransactionRepository extends ServiceEntityRepository
         $totalInvested = (float) ($result['totalInvested'] ?? 0);
         $totalQuantity = (float) ($result['totalQuantity'] ?? 0);
 
-        return $totalQuantity === 0 ? 0 : $totalInvested / $totalQuantity;
+        return $totalQuantity === 0.0 ? 0 : $totalInvested / $totalQuantity;
     }
 }
